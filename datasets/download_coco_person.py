@@ -1,4 +1,4 @@
-from datasets.config import COCO_PERSON
+from config import COCO_PERSON
 import os
 import random
 import numpy as np

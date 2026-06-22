@@ -1,4 +1,4 @@
-from datasets.config import LIP
+from config import LIP
 import os
 from datasets import load_dataset
 import numpy as np
