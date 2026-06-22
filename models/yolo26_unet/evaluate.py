@@ -43,7 +43,7 @@ def resize_mask_to_match(mask, target_shape):
     return (np.array(mask_img) > 127).astype(np.uint8)
 
 
-def evaluate_pipeline_on_dataset(pipeline_fn, dataset, model_name, dataset_name, conf_threshold=0.4, max_samples=None):
+def evaluate_pipeline_on_dataset(model, pipeline_fn, dataset, model_name, dataset_name, conf_threshold=0.4, max_samples=None):
     """
     Runs a segmentation pipeline across a full dataset and 
     computes metrics per image, then aggregates.
@@ -62,7 +62,7 @@ def evaluate_pipeline_on_dataset(pipeline_fn, dataset, model_name, dataset_name,
         gt_mask = sample["mask"]
 
         start_time = time.time()
-        pred_mask, num_detections = pipeline_fn(image, conf_threshold)
+        pred_mask, num_detections = pipeline_fn(image, model, conf_threshold)
         inference_time = time.time() - start_time
 
         pred_mask = resize_mask_to_match(pred_mask, gt_mask.shape)
@@ -98,4 +98,4 @@ def evaluate_pipeline_on_dataset(pipeline_fn, dataset, model_name, dataset_name,
     }
 
     return results_df, summary
-
+    
