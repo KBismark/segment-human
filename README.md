@@ -20,8 +20,7 @@ inspired by it, not a strict reproduction.
 - **Penn-Fudan** [170 images from Penn-Fudan Pedestrian Dataset](https://www.cis.upenn.edu/~jshi/ped_html/)    
 - **MADS** [1192 images from Martial Arts, Dancing and Sports dataset](https://www.kaggle.com/datasets/tapakah68/segmentation-full-body-mads-dataset)       
 
-All datasets contain RGB images with pixel-level binary human segmentation masks. Images were split per dataset using a stratified 
-75/10/15 train/validation/test split to ensure each dataset is represented across all three splits except for **Penn-Fudan**, which was a 60/40 split for train/test 
+All datasets contain RGB images with pixel-level binary human segmentation masks. 
 
 ## Models Tested
 
