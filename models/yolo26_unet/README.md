@@ -1,6 +1,6 @@
 # YOLO26 + Finetuned UNET
 
-**Reference:** Sheraz, H., Khan, Z. A., & Awais, M. (2025). Human instance segmentation based on omega-shape using deep learning.
+**Reference:** Sheraz, H., Khan, Z. A., & Awais, M. (2025). Human instance segmentation based on omega-shape using deep learning. [Link](https://www.researchgate.net/publication/389842912_Human_Instance_Segmentation_Based_on_Omega-_Shape_Using_Deep_Learning)
 
 ## In this paper
 
