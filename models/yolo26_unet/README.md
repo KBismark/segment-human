@@ -41,5 +41,5 @@ All datasets contain RGB images with pixel-level binary human segmentation masks
 75/10/15 train/validation/test split to ensure each dataset is represented across all three splits except for **Penn-Fudan**, which was a 60/40 split for train/test.
 
 ## Sample Results  
- ![YOLO26 + UNET Sample](results/sample/yolo26_unet.png)    
+ ![YOLO26 + UNET Sample](../../results/sample/yolo26_unet.png)    
 
