@@ -1,5 +1,7 @@
-from models.yolo26_unet.pipeline import unet_transform
+from models.yolo26_unet.evaluate import compute_metrics, resize_mask_to_match
+from models.yolo26_unet.pipeline import unet_transform, run_yolo_unet_pipeline
 import torch
+import os
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
@@ -13,6 +15,9 @@ NUM_EPOCHS = 5
 BATCH_SIZE = 8
 LEARNING_RATE = 1e-4
 TRAIN_SUBSET_SIZE = 300
+CHECKPOINT_DIR = f"{os.getcwd()}/models/yolo26_unet/pretrained_weights"
+os.makedirs(CHECKPOINT_DIR, exist_ok=True)
+
 
 
 def crop_to_bbox_from_mask(mask):
@@ -68,9 +73,9 @@ def dice_loss(pred_logits, target, eps=1e-6):
     return 1 - dice.mean()
 
 
-def fine_tune_unet(base_train_dataset, model, device, num_epochs=NUM_EPOCHS):
+def fine_tune_unet_with_validation(base_train_dataset, val_dataset, model, device, num_epochs=8, val_every=1, checpoint_dir="./models/yolo26_unet"):
     """
-    Fine-tunes the UNET decoder
+    Fine-tune UNet with validation. Saves the best weights.
     """
     train_ds = UNetTrainingDataset(base_train_dataset, unet_transform)
     train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True)
@@ -78,22 +83,44 @@ def fine_tune_unet(base_train_dataset, model, device, num_epochs=NUM_EPOCHS):
     criterion_bce = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
-    model.train()
+    best_val_iou = 0.0
+    best_epoch = 0
+    history = []
+
     for epoch in range(num_epochs):
+        model.train()
         epoch_loss = 0.0
         for imgs, masks in tqdm(train_loader, desc=f"Epoch {epoch+1}/{num_epochs}"):
             imgs, masks = imgs.to(device), masks.to(device)
-
             optimizer.zero_grad()
             logits = model(imgs)
             loss = criterion_bce(logits, masks) + dice_loss(logits, masks)
             loss.backward()
             optimizer.step()
-
             epoch_loss += loss.item()
 
-        print(f"Epoch {epoch+1}: avg loss = {epoch_loss / len(train_loader):.4f}")
+        avg_train_loss = epoch_loss / len(train_loader)
+        print(f"Epoch {epoch+1}: train loss = {avg_train_loss:.4f}")
 
-    model.eval()
-    return model
+        if (epoch + 1) % val_every == 0:
+            model.eval()
+            val_ious = []
+            for i in range(len(val_dataset)):
+                sample = val_dataset[i]
+                pred_mask, _ = run_yolo_unet_pipeline(sample["image"], 0.4)
+                pred_resized = resize_mask_to_match(pred_mask, sample["mask"].shape)
+                m = compute_metrics(pred_resized, sample["mask"])
+                val_ious.append(m["iou"])
 
+            val_iou = np.mean(val_ious)
+            print(f"  → Validation mIoU: {val_iou:.4f}")
+            history.append({"epoch": epoch+1, "train_loss": avg_train_loss, "val_iou": val_iou})
+
+            if val_iou > best_val_iou:
+                best_val_iou = val_iou
+                best_epoch = epoch + 1
+                torch.save(model.state_dict(), f"{checpoint_dir}/best.pt")
+                print(f"  → New best model saved (epoch {best_epoch})")
+
+    print(f"\nBest epoch: {best_epoch}, Best validation mIoU: {best_val_iou:.4f}")
+    return model, history
