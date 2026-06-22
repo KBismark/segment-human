@@ -6,7 +6,6 @@ import segmentation_models_pytorch as smp
 import torchvision.transforms as T
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
 # For detection-only checkpoint (not -seg), 
 # since we use it purely for region proposal
 yolo_model = YOLO("yolo26s.pt")
@@ -17,7 +16,7 @@ yolo_model.to(DEVICE)
 # The DECODER is randomly initialized and has never learned to segment anything.
 # Running it as-is produces near-random masks.
 unet_model = smp.Unet(
-    encoder_name="resnet34",
+    encoder_name="resnet50",
     encoder_weights="imagenet",
     in_channels=3,
     classes=1,            # binary: person vs background
@@ -45,7 +44,7 @@ def detect_person_boxes(image_pil, conf_threshold=0.4):
     return boxes
 
 
-def segment_crop_with_unet(image_pil, box):
+def segment_crop_with_unet(image_pil, box, model):
     """
     Crop the detected region and run UNET to get a binary mask.
     Returns the mask resized back to the crop's original dimensions.
@@ -59,9 +58,9 @@ def segment_crop_with_unet(image_pil, box):
 
     input_tensor = unet_transform(crop).unsqueeze(0).to(DEVICE)
 
-    unet_model.eval()
+    model.eval()
     with torch.no_grad():
-        logits = unet_model(input_tensor)
+        logits = model(input_tensor)
         pred = torch.sigmoid(logits).squeeze().cpu().numpy()
 
     binary_pred = (pred > 0.5).astype(np.uint8)
@@ -73,7 +72,7 @@ def segment_crop_with_unet(image_pil, box):
     return mask_resized
 
 
-def run_yolo_unet_pipeline(image_pil, conf_threshold=0.4):
+def run_yolo_unet_pipeline(image_pil, model, conf_threshold=0.4):
     """
     Full pipeline: detect persons with YOLO26, segment each crop with UNET,
     and reassemble into a full-image binary mask.
@@ -84,7 +83,7 @@ def run_yolo_unet_pipeline(image_pil, conf_threshold=0.4):
 
     for box in boxes:
         x1, y1, x2, y2 = box
-        crop_mask = segment_crop_with_unet(image_pil, box)
+        crop_mask = segment_crop_with_unet(image_pil, box, model)
         if crop_mask is not None:
             full_mask[y1:y2, x1:x2] = np.maximum(
                 full_mask[y1:y2, x1:x2], crop_mask
