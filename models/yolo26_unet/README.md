@@ -144,7 +144,7 @@ time using `mask > 0`, regardless of the original label format.
 
 Each model is evaluated using five metrics computed per image, then averaged:
 
-| Metric | Formula | What it measures |
+| Metric | What it measures |
 |---|---|
 | **mIoU** | Overlap between predicted and ground truth mask |
 | **Pixel Accuracy** | Proportion of correctly classified pixels |
