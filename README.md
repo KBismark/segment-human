@@ -24,12 +24,7 @@ All datasets contain RGB images with pixel-level binary human segmentation masks
 
 ## Models Tested
 
-- [YOLO26 + UNET](models/yolo26_unet/README.md)
-
-## Results
-
-See [results](results) for sample results on images and comparison tables across models and datasets. 
-
+- [YOLO26 + UNET](models/yolo26_unet/README.md) - [Live Demo on HuggingFace](https://huggingface.co/spaces/Kbis/segment-human) of model's performance
 
 ## Sample Results
 
@@ -38,4 +33,7 @@ See [results](results) for sample results on images and comparison tables across
 >
 
 
+## Results
+
+See [results](results) for sample results on images and comparison tables across models and datasets. 
 
