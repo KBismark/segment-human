@@ -6,12 +6,8 @@ applications and approaches toward perfect, or near-perfect, human segmentation.
 different domains, and as solutions for segmenting objects other than humans. Many of them achieve impressive results on their object of 
 concern.
 
-In my experiments, I take ideas from existing literature on how segmentation tasks were approached, whether for humans or other objects,
- and apply them to segmenting human figures in images. I also combine some of these ideas to form new approaches and test the resulting 
- hypotheses. I look into how these various methods perform will perform in real world.
-
-The results are not state of the art. The algorithms and implementations may not exactly match what's suggested in the literature; they're 
-inspired by it, not a strict reproduction.
+In this experiments, I took ideas from existing literature on how segmentation task was approached and apply it to segmenting human figures in images. The algorithms and implementations may not exactly match what's suggested in the literature; they're 
+inspired by it.
 
 ## Datasets  
 
@@ -22,7 +18,7 @@ inspired by it, not a strict reproduction.
 
 All datasets contain RGB images with pixel-level binary human segmentation masks. 
 
-## Models Tested
+## Model Tested
 
 - [YOLO26 + UNET](models/yolo26_unet/README.md) - [Live Demo](https://huggingface.co/spaces/Kbis/segment-human) of model's performance
 
