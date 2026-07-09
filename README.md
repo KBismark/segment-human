@@ -1,4 +1,4 @@
-# Implementation and evaluation of segmentation models from literature on human segmentation tasks
+# Implementation of YOLO and UNET for human segmentation tasks
 
 Human segmentation is a computer vision task that isolates human figures from complex backgrounds, ranging from easy, centered figures to 
 occluded figures in unfavorable environments, including poor lighting. It is an active and challenging research field with diverse 
