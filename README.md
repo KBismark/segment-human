@@ -1,5 +1,9 @@
 # Implementation of YOLO and UNET for human segmentation tasks
 
+> [YOLO26 + UNET Live Demo](https://huggingface.co/spaces/Kbis/segment-human)    
+> ![YOLO26 + UNET Sample](results/sample/yolo26_unet.png)    
+>
+
 Human segmentation is a computer vision task that isolates human figures from complex backgrounds, ranging from easy, centered figures to 
 occluded figures in unfavorable environments, including poor lighting. It is an active and challenging research field with diverse 
 applications and approaches toward perfect, or near-perfect, human segmentation. Some of these approaches are generally applied across 
@@ -16,17 +20,13 @@ inspired by it.
 - **Penn-Fudan** [170 images from Penn-Fudan Pedestrian Dataset](https://www.cis.upenn.edu/~jshi/ped_html/)    
 - **MADS** [1192 images from Martial Arts, Dancing and Sports dataset](https://www.kaggle.com/datasets/tapakah68/segmentation-full-body-mads-dataset)       
 
-All datasets contain RGB images with pixel-level binary human segmentation masks. 
 
 ## Model Tested
 
 - [YOLO26 + UNET](models/yolo26_unet/README.md) - [Live Demo](https://huggingface.co/spaces/Kbis/segment-human) of model's performance
 
-## Sample Results
 
-> [YOLO26 + UNET](models/yolo26_unet/README.md)    
-> ![YOLO26 + UNET Sample](results/sample/yolo26_unet.png)    
->
+
 
 
 ## Results
