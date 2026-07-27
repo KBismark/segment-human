@@ -1,6 +1,7 @@
-# Implementation of YOLO and UNET for human segmentation tasks
+<h1 align="center">YOLO + UNET for human segmentation tasks</h1>
+<p align="center"><a href="https://huggingface.co/spaces/Kbis/segment-human">Live Demo (HuggingFace)</a></p>    
 
-> [YOLO26 + UNET Live Demo](https://huggingface.co/spaces/Kbis/segment-human)    
+>   
 > ![YOLO26 + UNET Sample](results/sample/yolo26_unet.png)    
 >
 
@@ -21,15 +22,5 @@ inspired by it.
 - **MADS** [1192 images from Martial Arts, Dancing and Sports dataset](https://www.kaggle.com/datasets/tapakah68/segmentation-full-body-mads-dataset)       
 
 
-## Model Tested
-
-- [YOLO26 + UNET](models/yolo26_unet/README.md) - [Live Demo](https://huggingface.co/spaces/Kbis/segment-human) of model's performance
-
-
-
-
-
-## Results
-
-See [results](results) for sample results on images and comparison tables across models and datasets. 
-
+## Findings
+Results of this experiment is documented here ([models/yolo26_unet](models/yolo26_unet))    
