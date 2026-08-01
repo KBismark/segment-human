@@ -73,15 +73,7 @@ resolution using transposed convolutions. Skip connections between matching enco
 and decoder layers preserve spatial detail lost during downsampling. 
 The output is a binary mask the same size as the input crop, where each pixel is 
 classified as person **(1)** or background **(0)**. The loss function used is a combination of 
-Binary Cross-Entropy (BCE) and Dice Loss:
-
-$$\mathcal{L} = \mathcal{L}_{BCE} + \mathcal{L}_{Dice}$$
-
-$$\mathcal{L}_{BCE} = -\frac{1}{N}\sum_{i=1}^{N} \left[ y_i \log(\hat{y}_i) + (1 - y_i)\log(1 - \hat{y}_i) \right]$$
-
-$$\mathcal{L}_{Dice} = 1 - \frac{2 \sum y_i \hat{y}_i + \epsilon}{\sum y_i + \sum \hat{y}_i + \epsilon}$$
-
-The BCE penalizes per-pixel prediction errors. Dice Loss directly optimizes the overlap 
+Binary Cross-Entropy (BCE) and Dice Loss. The BCE penalizes per-pixel prediction errors. Dice Loss directly optimizes the overlap 
 between predicted and ground truth masks, making it more robust when person pixels 
 are sparse relative to background pixels.
 
