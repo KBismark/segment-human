@@ -47,11 +47,6 @@ def evaluate_pipeline_on_dataset(model, pipeline_fn, dataset, model_name, datase
     """
     Runs a segmentation pipeline across a full dataset and 
     computes metrics per image, then aggregates.
-
-    pipeline_fn: function(image_pil) -> (predicted_mask, num_detections)
-    dataset: a Dataset object returning {"image", "mask", "filename"}
-
-    Returns: (results_df, summary_dict)
     """
     records = []
     n = len(dataset) if max_samples is None else min(max_samples, len(dataset))
