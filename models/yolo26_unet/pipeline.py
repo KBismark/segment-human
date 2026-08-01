@@ -7,12 +7,11 @@ import torchvision.transforms as T
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # For detection-only checkpoint (not -seg), 
-# since we use it purely for region proposal
+# Used it purely for region proposal
 yolo_model = YOLO("yolo26s.pt")
 yolo_model.to(DEVICE)
 
 
-# smp's "pretrained" weights only cover the ENCODER (ImageNet backbone).
 # The DECODER is randomly initialized and has never learned to segment anything.
 # Running it as-is produces near-random masks.
 unet_model = smp.Unet(
@@ -33,7 +32,7 @@ unet_transform = T.Compose([
 
 def detect_person_boxes(image_pil, conf_threshold=0.4):
     """
-    Use YOLO26 detection to return bounding boxes for 'person' class only.
+    Uses YOLO26 detection to return bounding boxes for 'person' class only.
     """
     results = yolo_model.predict(image_pil, conf=conf_threshold, verbose=False)
     boxes = []
