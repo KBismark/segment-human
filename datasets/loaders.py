@@ -5,13 +5,6 @@ from torch.utils.data import Dataset
 
 
 class PennFudanDataset(Dataset):
-    """
-    Penn-Fudan Pedestrian Dataset.
-    Structure:
-        PennFudanPed/
-            PNGImages/   
-            PedMasks/  
-    """
     def __init__(self, root_dir):
         self.root_dir = root_dir
         self.img_dir = os.path.join(root_dir, "PNGImages")
@@ -40,13 +33,6 @@ class PennFudanDataset(Dataset):
 
 
 class LIPDataset(Dataset):
-    """
-    Look Into Person (LIP) Dataset subset.
-    Structure:
-        LIP/
-            image/   
-            gt/      
-    """
     def __init__(self, root_dir, subset_size=None, seed=42):
         self.root_dir = root_dir
         self.img_dir = os.path.join(root_dir, "image")
@@ -86,13 +72,6 @@ class LIPDataset(Dataset):
 
 
 class COCOPersonDataset(Dataset):
-    """
-    COCO person-category subset.
-    Structure:
-        COCO_person/
-            images/   
-            masks/    
-    """
     def __init__(self, root_dir, subset_size=None, seed=42):
         self.root_dir = root_dir
         self.img_dir = os.path.join(root_dir, "images")
@@ -132,15 +111,6 @@ class COCOPersonDataset(Dataset):
 
 
 class MADSDataset(Dataset):
-    """
-    MADS (Martial Arts, Dancing and Sports) Mask Dataset — Le et al. (2023).
-    Binary human segmentation masks for fast, dynamic body movements.
-
-    Structure (as provided):
-        MADS_Dataset/dataset/
-            images/
-            masks/
-    """
     def __init__(self, root_dir, subset_size=None, seed=42):
         self.root_dir = root_dir
         self.img_dir = os.path.join(root_dir, "images")
