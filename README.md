@@ -11,8 +11,33 @@ applications and approaches toward perfect, or near-perfect, human segmentation.
 different domains, and as solutions for segmenting objects other than humans. Many of them achieve impressive results on their object of 
 concern.
 
-In this experiments, I took ideas from existing literature on how segmentation task was approached and apply it to segmenting human figures in images. The algorithms and implementations may not exactly match what's suggested in the literature; they're 
-inspired by it.
+In this experiment, I apply instance segmentation to segment human figures. The main concepts:    
+- YOLO model detects the bounding boxes of each instance
+- Region of Interest Align crops and standardizes these instances from the feature vector.
+- UNET takes each cropped instance one by one as input and gives the segmented output.
+ 
+
+## Pipeline
+- **Step 1**: Input image       
+- **Step 2**: YOLO26 (small) for person bounding boxes (conf ≥ 0.4)       
+- **Step 3**: For each detected box, crop and resize to 256×256       
+- **Step 4**: UNET (ResNet-50 encoder) produces binary mask (256×256)     
+- **Step 5**: Resize mask back to original crop dimensions        
+- **Step 6**: Place mask into full-image canvas        
+- **Step 7**: Final full-image binary mask
+
+## Evaluation Metrics
+
+Each model is evaluated using five metrics computed per image, then averaged:
+
+| Metric | What it measures |
+|---|---|
+| **mIoU** | Overlap between predicted and ground truth mask |
+| **Pixel Accuracy** | Proportion of correctly classified pixels |
+| **Precision** | Of all predicted person pixels, how many were correct |
+| **Recall** | Of all actual person pixels, how many were found |
+| **FPS** | Full pipeline throughput per image |
+
 
 ## Datasets  
 
@@ -20,7 +45,6 @@ inspired by it.
 - **COCO** [2000 images of person-class subset of COCO 2017 validation set](https://cocodataset.org)    
 - **Penn-Fudan** [170 images from Penn-Fudan Pedestrian Dataset](https://www.cis.upenn.edu/~jshi/ped_html/)    
 - **MADS** [1192 images from Martial Arts, Dancing and Sports dataset](https://www.kaggle.com/datasets/tapakah68/segmentation-full-body-mads-dataset)       
-
 
 ## Findings
 Results of this experiment is documented here ([models/yolo26_unet](models/yolo26_unet))    
