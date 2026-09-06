@@ -1,0 +1,8 @@
+torch
+numpy
+pillow
+ultralytics
+segmentation-models-pytorch
+torchvision
+tqdm
+pandas
