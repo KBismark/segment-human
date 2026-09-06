@@ -15,8 +15,6 @@ NUM_EPOCHS = 50
 BATCH_SIZE = 8
 LEARNING_RATE = 1e-4
 
-CHECKPOINT_DIR = "pretrained_weights" 
-os.makedirs(CHECKPOINT_DIR, exist_ok=True)
 
 def crop_to_bbox_from_mask(mask):
     """Get bounding box from a binary mask"""
@@ -96,8 +94,8 @@ def fine_tune_unet_with_validation(base_train_dataset, val_dataset, model, devic
         if (epoch + 1) % val_every == 0:
             model.eval()
             val_ious = []
-            # Limits validation to 150 images 
-            val_limit = min(len(val_dataset), 150) 
+            # Limits validation to 200 images 
+            val_limit = min(len(val_dataset), 200) 
             
             with torch.no_grad():
                 for i in range(val_limit):
@@ -115,7 +113,7 @@ def fine_tune_unet_with_validation(base_train_dataset, val_dataset, model, devic
             if val_iou > best_val_iou:
                 best_val_iou = val_iou
                 best_epoch = epoch + 1
-                save_path = os.path.join(checkpoint_dir, "best_unet.pt")
+                save_path = os.path.join(checkpoint_dir, "best.pt")
                 torch.save(model.state_dict(), save_path)
                 print(f" -- New best model saved: {save_path}")
 
