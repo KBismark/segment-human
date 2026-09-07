@@ -15,7 +15,7 @@ def run_training():
     # train
     finetuned_model, training_history = fine_tune_unet_with_validation(
         coco_train, coco_val, unet_model, DEVICE, conf_threshold=0.4, num_epochs=80, 
-        val_every=5, checpoint_dir=CHECKPOINT_DIR
+        val_every=5, checkpoint_dir=CHECKPOINT_DIR
     )
 
     save_path = f"{CHECKPOINT_DIR}/final.pt"
