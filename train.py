@@ -18,11 +18,6 @@ def run_training():
         val_every=5, checkpoint_dir=CHECKPOINT_DIR
     )
 
-    save_path = f"{CHECKPOINT_DIR}/final.pt"
-    torch.save(finetuned_model.state_dict(), save_path)
-    print(f"Saved fine-tuned weights to {save_path}")
-
-
     with open(f"{CHECKPOINT_DIR}/training_history.json", "w") as f:
         json.dump(training_history, f, indent=2)
 
