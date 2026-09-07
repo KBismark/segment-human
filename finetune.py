@@ -15,7 +15,6 @@ NUM_EPOCHS = 50
 BATCH_SIZE = 8
 LEARNING_RATE = 1e-4
 
-
 def crop_to_bbox_from_mask(mask):
     """Get bounding box from a binary mask"""
     ys, xs = np.where(mask > 0)
@@ -61,17 +60,32 @@ def dice_loss(pred_logits, target, eps=1e-6):
     return 1 - dice.mean()
 
 def fine_tune_unet_with_validation(base_train_dataset, val_dataset, model, device, conf_threshold=0.4, num_epochs=50, val_every=1, checkpoint_dir="./pretrained_weights"):
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    
     train_ds = UNetTrainingDataset(base_train_dataset, unet_transform)
     train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True)
 
     criterion_bce = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
+    
+    start_epoch = 0
     best_val_iou = 0.0
-    best_epoch = 0
     history = []
+    last_checkpoint_path = os.path.join(checkpoint_dir, "last.pt")
 
-    for epoch in range(num_epochs):
+    if os.path.exists(last_checkpoint_path):
+        print(f" -- Found last checkpoint: {last_checkpoint_path}. Resuming...")
+        checkpoint = torch.load(last_checkpoint_path, map_location=device)
+        
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        start_epoch = checkpoint['epoch']
+        best_val_iou = checkpoint['best_val_iou']
+        history = checkpoint.get('history', [])
+        print(f" -- Resumed from epoch {start_epoch}. Previous Best mIoU: {best_val_iou:.4f}")
+
+    for epoch in range(start_epoch, num_epochs):
         model.train()
         epoch_loss = 0.0
         
@@ -91,30 +105,43 @@ def fine_tune_unet_with_validation(base_train_dataset, val_dataset, model, devic
         print(f"Epoch {epoch+1}: train loss = {avg_train_loss:.4f}")
 
         # VALIDATION 
+        val_iou = 0.0
         if (epoch + 1) % val_every == 0:
             model.eval()
             val_ious = []
-            # Limits validation to 200 images 
             val_limit = min(len(val_dataset), 200) 
             
             with torch.no_grad():
                 for i in range(val_limit):
                     sample = val_dataset[i]
                     pred_mask, _ = run_yolo_unet_pipeline(sample["image"], model, conf_threshold=conf_threshold)
-                    
                     pred_resized = resize_mask_to_match(pred_mask, sample["mask"].shape)
                     m = compute_metrics(pred_resized, sample["mask"])
                     val_ious.append(m["iou"])
 
             val_iou = np.mean(val_ious)
             print(f" -- Validation mIoU: {val_iou:.4f}")
-            history.append({"epoch": epoch+1, "train_loss": avg_train_loss, "val_iou": val_iou})
+        
+        # Save History
+        history.append({"epoch": epoch+1, "train_loss": avg_train_loss, "val_iou": val_iou})
 
-            if val_iou > best_val_iou:
-                best_val_iou = val_iou
-                best_epoch = epoch + 1
-                save_path = os.path.join(checkpoint_dir, "best.pt")
-                torch.save(model.state_dict(), save_path)
-                print(f" -- New best model saved: {save_path}")
+        # --- SAVE CHECKPOINTS ---
+        checkpoint_data = {
+            'epoch': epoch + 1,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'best_val_iou': best_val_iou,
+            'history': history
+        }
+
+        # Save 'last.pt' 
+        torch.save(checkpoint_data, last_checkpoint_path)
+
+        # Save 'best.pt' if mIoU improves
+        if val_iou > best_val_iou:
+            best_val_iou = val_iou
+            best_path = os.path.join(checkpoint_dir, "best.pt")
+            torch.save(checkpoint_data, best_path)
+            print(f" -- New best model saved: {best_path}")
 
     return model, history
