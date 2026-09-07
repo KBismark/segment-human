@@ -19,17 +19,17 @@ coco = COCO("annotations/instances_val2017.json")
 person_cat_id = coco.getCatIds(catNms=["person"])
 img_ids = coco.getImgIds(catIds=person_cat_id)
 
-print(f"Total images containing at least one person: {len(img_ids)}")
+NUM_SAMPLES = len(img_ids)
+print(f"Total images containing at least one person: {NUM_SAMPLES}")
 
-NUM_SAMPLES = len(img_ids) if len(img_ids) < 2000 else 2000 # 2000 since it's over 2600
+ 
 random.seed(42)
 random.shuffle(img_ids)
-subset_ids = img_ids[:NUM_SAMPLES]
 
 img_dir = COCO_PERSON["img_dir"]
 mask_dir = COCO_PERSON["mask_dir"]
 
-for img_id in tqdm(subset_ids):
+for img_id in tqdm(img_ids):
     img_info = coco.loadImgs(img_id)[0]
     src_path = os.path.join("val2017", img_info["file_name"])
     if not os.path.exists(src_path):
