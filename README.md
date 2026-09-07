@@ -50,7 +50,7 @@ The UNET decoder was fine-tuned using the validation set of the COCO dataset due
 - Clone this repo with `git clone https://github.com/KBismark/segment-human.git`.    
 -  Install dependencies `pip install -r requirements.txt`.
 -  Check the respective files for downloading the training dataset and the test dataset in the `dataset/` folder.
--  You may use the `colab.ipynb` to save time   
+-  You may use the [colab.ipynb](./colab.ipynb) to save time   
 
 ## Inference
 You can get the pretrained weights at [Google Drive](https://drive.google.com/file/d/1MK7L2T2A3VQ5Zgn_2YlYkxEWg_s5caAa/view?usp=sharing) and save in the `checkpoints/` folder. Run `python test.py` to test on the Penn Fudan Pedestrian dataset.     
