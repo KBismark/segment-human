@@ -21,7 +21,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 test_model = smp.Unet(
     encoder_name="resnet50",
-    encoder_weights="imagenet",
+    encoder_weights=None,
     in_channels=3,
     classes=1,
     activation=None
