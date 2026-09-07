@@ -47,7 +47,7 @@ The UNET decoder was fine-tuned using the validation set of the COCO dataset. On
 
 ## Installation
 - Clone this repo with `git clone https://github.com/KBismark/segment-human.git`.    
--  Install dependencies `pip install -f requirements.txt`.
+-  Install dependencies `pip install -r requirements.txt`.
 -  Check the respective files for downloading the training dataset and the test dataset in the `dataset/` folder.
 -  You may use the `colab.ipynb` to save time   
 
