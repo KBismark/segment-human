@@ -38,5 +38,5 @@ test_samples = [
 ]
 
 # Visualization 
-visualize_segmentation_comparison(model, run_yolo_unet_pipeline, test_samples)
+visualize_segmentation_comparison(model, run_yolo_unet_pipeline, test_samples, save_path="results/penn_fudan.png")
 
