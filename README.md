@@ -38,8 +38,9 @@ Each model is evaluated using five metrics computed per image, then averaged:
 | **FPS** | Full pipeline throughput per image |
 
 ## Fine-tuning and Testing
+Ran on NVIDIA T4 GPU on Colab | 16 RAM | Batch size = 8 | 50 Epochs.   
 
-The UNET decoder was fine-tuned using the validation set of the COCO dataset. Only images containing at least one person were used for training. In all, there were 2693 images of the person class in the validation set. The encoder uses ImageNet pretrained weights with a ResNet50 backbone. Testing was done entirely with a different dataset using the Penn Fudan Pedestrian dataset. Results can be found in the summary csv file in the results folder. A summary result is provided below:
+The UNET decoder was fine-tuned using the validation set of the COCO dataset due to resource limits. Only images containing at least one person were used for training. In all, there were 2693 images of the person class in the validation set. The encoder uses ImageNet pretrained weights with a ResNet50 backbone. NVIDIA T4 Tensor Core GPU Testing was done entirely on a different dataset using the Penn Fudan Pedestrian dataset. Results can be found in the summary csv file in the results folder. A summary result is provided below:
 
 | Dataset | mIoU | Accuracy | Precision | Recall | FPS |
 |---|---|---|---|---|---|
