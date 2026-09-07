@@ -29,7 +29,8 @@ test_model = smp.Unet(
 test_model.to(DEVICE)
 
 if os.path.exists(CHECKPOINT_PATH):
-    test_model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=DEVICE))
+    checkpoint = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
+    test_model.load_state_dict(checkpoint['model_state_dict'])
     test_model.eval()
     print("Loaded fine-tuned weights. Running tests...")
 else:
