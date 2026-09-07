@@ -1,9 +1,8 @@
+
 <h1 align="center">YOLO + UNET for human segmentation tasks</h1>
 <p align="center"><a href="https://huggingface.co/spaces/Kbis/segment-human">Live Demo (HuggingFace)</a></p>    
 
->   
-> ![YOLO26 + UNET Sample](results/sample/yolo26_unet.png)    
->
+<img width="1200" height="797" alt="YOLO26 + UNET Results Sample" src="https://github.com/user-attachments/assets/31afa36f-6d1d-4d83-a55f-70750cb8db4a" />
 
 Human segmentation is a computer vision task that isolates human figures from complex backgrounds, ranging from easy, centered figures to 
 occluded figures in unfavorable environments, including poor lighting. It is an active and challenging research field with diverse 
@@ -38,13 +37,25 @@ Each model is evaluated using five metrics computed per image, then averaged:
 | **Recall** | Of all actual person pixels, how many were found |
 | **FPS** | Full pipeline throughput per image |
 
+## Fine-tuning and Testing
 
-## Datasets  
+The UNET decoder was fine-tuned using the validation set of the COCO dataset. Only images containing at least one person were used for training. In all, there were 2693 images of the person class in the validation set. The encoder uses ImageNet pretrained weights with a ResNet50 backbone. Testing was done entirely with a different dataset using the Penn Fudan Pedestrian dataset. Results can be found in the summary csv file in the results folder. A summary result is provided below:
 
-- **LIP** [2000 images from Human Parsing Dataset](https://huggingface.co/datasets/mattmdjaga/human_parsing_dataset)     
-- **COCO** [2000 images of person-class subset of COCO 2017 validation set](https://cocodataset.org)    
-- **Penn-Fudan** [170 images from Penn-Fudan Pedestrian Dataset](https://www.cis.upenn.edu/~jshi/ped_html/)    
-- **MADS** [1192 images from Martial Arts, Dancing and Sports dataset](https://www.kaggle.com/datasets/tapakah68/segmentation-full-body-mads-dataset)       
+| Dataset | mIoU | Accuracy | Precision | Recall | FPS |
+|---|---|---|---|---|---|
+| Penn-Fudan | 0.807 | 0.958 | 0.829 | 0.967 | 14.49 |
 
-## Findings
-Results of this experiment is documented here ([models/yolo26_unet](models/yolo26_unet))    
+## Installation
+- Clone this repo with `git clone https://github.com/KBismark/segment-human.git`.    
+-  Install dependencies `pip install -f requirements.txt`.
+-  Check the respective files for downloading the training dataset and the test dataset in the `dataset/` folder.
+-  You may use the `colab.ipynb` to save time   
+
+## Inference
+You can get the pretrained weights at [Google Drive](https://drive.google.com/file/d/1MK7L2T2A3VQ5Zgn_2YlYkxEWg_s5caAa/view?usp=sharing) and save in the `checkpoints/` folder. Run `python test.py` to test on the Penn Fudan Pedestrian dataset.     
+
+Running `python test.py` without the saved checkpoints will automatically begin training and also run the tests after.     
+
+
+
+
