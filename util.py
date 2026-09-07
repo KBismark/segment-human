@@ -46,7 +46,7 @@ def visualize_segmentation_comparison(model, pipeline_fn, samples, conf_threshol
         axes[i, 1].set_title("Ground Truth Mask")
         axes[i, 1].axis('off')
 
-        axes[i, 2].imshow(pred_mask, cmap='magma') 
+        axes[i, 2].imshow(pred_mask, cmap='gray') 
         axes[i, 2].set_title("Predicted Mask")
         axes[i, 2].axis('off')
 
